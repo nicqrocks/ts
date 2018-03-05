@@ -39,7 +39,7 @@ sub MAIN(:$after is copy, :$before is copy) {
 
 		for @t[0,1] {
 			$_ = .WHAT ~~ DateTime
-				?? sprintf("%2d:%2d", .hour, .minute)
+				?? sprintf("%02d:%02d", .hour, .minute)
 				!! "??:??:??";
 		}
 
