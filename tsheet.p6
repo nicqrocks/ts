@@ -35,12 +35,12 @@ sub MAIN(:$after is copy, :$before is copy) {
 
 		my $diff = @t[0,1]».defined.all
 			?? sprintf("%.2f", (@t[1] - @t[0]) / 3600)
-			!! "??:??:??";
+			!! "?.??";
 
 		for @t[0,1] {
 			$_ = .WHAT ~~ DateTime
 				?? sprintf("%02d:%02d", .hour, .minute)
-				!! "??:??:??";
+				!! "??:??";
 		}
 
 		($d, |@t, $diff).join(',').say;
