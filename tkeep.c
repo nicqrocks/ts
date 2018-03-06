@@ -6,8 +6,9 @@ Time keeper. Get the current time and write it to a file.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
+#define __USE_XOPEN
+#include <time.h>
 
 
 /* Define marcos */
@@ -17,7 +18,7 @@ Time keeper. Get the current time and write it to a file.
 
 /* Prototypes */
 void help();
-char * isotime();
+char * isotime(char *);
 int write(char *, int);
 
 
@@ -56,17 +57,28 @@ void help() {
 
 
 /* Get a string of the current time in iso format. */
-char * isotime() {
+char * isotime(char * str) {
 	time_t t = time(0);
 	t = (t - ( (t - 7) % (15 * 60) ) );
-	return asctime( localtime( &t ) );
+	strptime(str, "%FT%T%z", localtime(&t));
+	return str;
 }
 
 
 /* Write time to file. */
 int write(char * f, int s) {
+	char iso[64];
 	FILE *fh = fopen(f, "w");
-	fprintf(fh, "%d,%s", s, isotime());
+
+	if (fh == NULL) {
+		fprintf(stderr, "Can not write to '%s'\n", f);
+		return 0;
+	}
+
+	isotime(iso);
+	fprintf(fh, "%d,%s", s, iso);
+
 	fclose(fh);
-	return 0;
+	return 1;
 }
+
