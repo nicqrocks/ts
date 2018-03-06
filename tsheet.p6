@@ -4,16 +4,24 @@ constant $tsloc = %*ENV<TSLOC> || $*HOME ~ "/Documents/ts";
 
 sub USAGE() {
 	print Q:c:to/END/;
-	USAGE: {$*PROGRAM-NAME} [-a|--after DATE] [-b|--before DATE]
+	USAGE: {$*PROGRAM-NAME} [OPTIONS]
+	Options:
+		-a|--after  DATE		Restrict times to after a given date.
+
+		-b|--before DATE		Restrict times to before a given date.
+
+		-t|--totals     		Display a total for each week.
+
 	END
 }
 
-sub MAIN(:$after is copy, :$before is copy) {
+sub MAIN(:after(:$a) is copy, :before(:$b) is copy, :totals(:$t)) {
 	my %info;
-	my $week;
+	my $week = 0;
+	my $sum = 0;
 
-	if $after.defined  { $after  = qqx{date -d "$after"  '+%F'}.chomp; }
-	if $before.defined { $before = qqx{date -d "$before" '+%F'}.chomp; }
+	if $a.defined  { $a  = qqx{date -d "$a"  '+%F'}.chomp; }
+	if $b.defined { $b = qqx{date -d "$b" '+%F'}.chomp; }
 
 	for $tsloc.IO.lines -> $l {
 		#Split apart the line.
@@ -21,8 +29,8 @@ sub MAIN(:$after is copy, :$before is copy) {
 		my $dt = DateTime.new: $iso;
 
 		#Check if there are any limits.
-		if $after.defined  { next unless $dt.Date > Date.new($after);  }
-		if $before.defined { next unless $dt.Date < Date.new($before); }
+		if $a.defined  { next unless $dt.Date > Date.new($a);  }
+		if $b.defined { next unless $dt.Date < Date.new($b); }
 
 		#Save the info.
 		#say ($stat == 1 ?? "out: " !! "in:  ") ~ $dt.hh-mm-ss;
@@ -30,7 +38,7 @@ sub MAIN(:$after is copy, :$before is copy) {
 	}
 
 	for %info.keys.sort -> $d {
-		#FIRST { $week = Date.new($d).week[1]; }
+		FIRST { $week = Date.new($d).week[1]; }
 		my @t = %info{$d}<>;
 
 		my $diff = @t[0,1]».defined.all
@@ -44,5 +52,14 @@ sub MAIN(:$after is copy, :$before is copy) {
 		}
 
 		($d, |@t, $diff).join(',').say;
+
+		if $t {
+			$sum += $diff unless $diff ~~ /\?+/;
+			if ($week != Date.new($d).week[1]) {
+				++$week;
+				say "Week $week: $sum";
+				$sum = 0;
+			}
+		}
 	}
 }
