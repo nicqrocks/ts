@@ -7,3 +7,5 @@ tkeep.o: tkeep.c
 clean:
 	rm tkeep tkeep.o
 
+test: tkeep
+	prove -v
