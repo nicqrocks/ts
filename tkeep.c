@@ -62,7 +62,8 @@ void help() {
 /* Get a string of the current time in iso format. */
 char * isotime(char * str) {
 	time_t t = time(0);
-	t = (t - ( (t - 7) % (15 * 60) ) );
+	t += 420;
+	t = (t - ( t % (15 * 60) ) );
 	strftime(str, 64, "%FT%T%z", localtime(&t));
 	return str;
 }
