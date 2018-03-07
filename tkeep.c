@@ -11,8 +11,9 @@ Time keeper. Get the current time and write it to a file.
 
 
 /* Define marcos */
-#define opt(b) (strcmp(argv[i], b) == 0)
-#define debug(msg) (printf("%s\n", msg))
+#define chkopt(a)	(strcmp(argv[i], a) == 0)
+#define dscopt(a,b)	(printf("\t%s\n\t\t%s\n", a, b))
+#define debug(msg)	(printf("%s\n", msg))
 
 
 /* Prototypes */
@@ -38,14 +39,16 @@ int main(int argc, char const *argv[]) {
 
 	/* Go through the arguments given. */
 	for (int i = 1; i < argc; ++i) {
-		if (opt("-h") || opt("--help")) { help(); }
+		if (chkopt("-h") || chkopt("--help")) { help(); }
 		else
-		if (opt("-i") || opt("--in")  ) { write(loc, 0); }
+		if (chkopt("-i") || chkopt("--in")  ) { write(loc, 0); }
 		else
-		if (opt("-o") || opt("--out") ) { write(loc, 1); }
+		if (chkopt("-o") || chkopt("--out") ) { write(loc, 1); }
+		else
+		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
 		else {
 			fprintf(stderr, "Unknown argument: %s\n", argv[i]);
-			exit(1);
+			exit(2);
 		}
 	}
 
@@ -55,7 +58,13 @@ int main(int argc, char const *argv[]) {
 
 /* Help message */
 void help() {
-	printf("USAGE: tkeep [-h|--help] [-i|--in] [-o|--out]\n");
+	printf("USAGE: tkeep [OPTIONS]\n");
+	printf("OPTIONS:\n");
+	dscopt("-h|--help", "Print help options");
+	dscopt("-i|--in", "Record IN time");
+	dscopt("-o|--out", "Record OUT time");
+	dscopt("-v|--version", "Print version: " VERSION);
+	exit(1);
 }
 
 
