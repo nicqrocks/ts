@@ -8,10 +8,10 @@ Testing the `ts` library.
 #include "../ts.h"
 
 /* Define some macros. */
-#define plan(a) ( printf("1..%d", a) )
-#define ok(a) ( printf("ok %d - %s", ++TAP_COUNT, a) )
-#define nok(a) ( printf("ok %d - %s", ++TAP_COUNT, a) )
-#define donet() ( printf("1..%d", TAP_COUNT) )
+#define plan(a) ( printf("1..%d\n", a) )
+#define ok(a) ( printf("ok %d - %s\n", ++TAP_COUNT, a) )
+#define nok(a) ( printf("not ok %d - %s\n", ++TAP_COUNT, a) )
+#define donet() ( printf("1..%d\n", TAP_COUNT) )
 
 
 /* Global to keep track of test numbers. */
@@ -38,8 +38,15 @@ int main() {
 /* Check if the getts function works. */
 int chkgetts(char * ev, char * ex) {
 	char ts[257];
-	setenv("TSLOC", ev, 1);
+	
+	if (ev != NULL) {
+		setenv("TSLOC", ev, 1);
+	} else {
+		unsetenv("TSLOC");
+	}
+	
 	getts(ts);
+	
 	if (strcmp(ts, ex) == 0) {
 		ok("`getts` gives the correct location");
 	} else {
