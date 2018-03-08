@@ -8,7 +8,7 @@ VERSION = 0.2
 PREFIX = /usr/local
 
 #Flags
-CFLAGS = -DVERSION=\"$(VERSION)\" -std=c99
+FLAGS = -DVERSION=\"$(VERSION)\" -std=c99
 
 #Compiler
 # CC = tcc
