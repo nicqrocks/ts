@@ -52,9 +52,9 @@ int main(int argc, char const *argv[]) {
 void help() {
 	printf("USAGE: tkeep [OPTIONS]\n");
 	printf("OPTIONS:\n");
-	dscopt("-h|--help", "Print help options");
-	dscopt("-i|--in", "Record IN time");
-	dscopt("-o|--out", "Record OUT time");
+	dscopt("-h|--help", "Print help options.");
+	dscopt("-i|--in", "Record IN time.");
+	dscopt("-o|--out", "Record OUT time.");
 	dscopt("-v|--version", "Print version: " VERSION);
 	exit(1);
 }
