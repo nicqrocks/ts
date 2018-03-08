@@ -12,13 +12,16 @@ tkeep: tkeep.o ts.o
 tsheet: tsheet.o ts.o
 	$(CC) $(FLAGS) -o $@ $^
 
+t/00-ts.t: t/00-ts.o
+	$(CC) $(FLAGS) -o t/00-ts.t t/00-ts.o ts.o
+
 %.o: %.c
 	$(CC) $(FLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(BIN) *.o 
+	rm -f $(BIN) *.o t/00-ts.t
 
-test: $(BIN)
+test: $(BIN) t/00-ts.t
 	prove -v
 
 install: $(BIN)
