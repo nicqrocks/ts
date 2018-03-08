@@ -1,15 +1,8 @@
 #Time keeper and reporter
 
 include config.mk
-
 BIN = tkeep tsheet
-SRC = $(BIN:=.c)
-OBJ = $(SRC:.c=.o)
 
-debug:
-	@echo $(BIN)
-	@echo $(SRC)
-	@echo $(OBJ)
 
 all: $(BIN)
 
@@ -23,7 +16,7 @@ tsheet: tsheet.o ts.o
 	$(CC) $(FLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(BIN) $(OBJ)
+	rm -f $(BIN) *.o 
 
 test: $(BIN)
 	prove -v
