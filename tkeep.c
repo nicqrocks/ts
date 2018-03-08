@@ -8,12 +8,7 @@ Time keeper. Get the current time and write it to a file.
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-
-/* Define marcos */
-#define chkopt(a)	(strcmp(argv[i], a) == 0)
-#define dscopt(a,b)	(printf("\t%s\n\t\t%s\n", a, b))
-#define debug(msg)	(printf("%s\n", msg))
+#include "ts.h"
 
 
 /* Prototypes */
@@ -25,14 +20,11 @@ int write(char *, int);
 /* Main */
 int main(int argc, char const *argv[]) {
 	/* Makes some vars */
-	char * loc = getenv("TSLOC");
+	char loc[257];
 	int s = 0;
 
-	/* Give a default to `loc` if the 'TSLOC' variable is not set. */
-	if (loc == NULL) {
-		loc = getenv("HOME");
-		strcat(loc, "/Documents/ts");
-	}
+	/* Get the location of the timesheet */
+	getts(loc);
 
 	/* Display help if no arguments were given. */
 	if (argc == 1) { help(); }
