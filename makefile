@@ -12,7 +12,7 @@ tkeep: tkeep.o ts.o
 tsheet: tsheet.o ts.o
 	$(CC) $(FLAGS) -o $@ $^
 
-t/00-ts.t: t/00-ts.o
+t/00-ts.t: t/00-ts.o ts.o
 	$(CC) $(FLAGS) -o t/00-ts.t t/00-ts.o ts.o
 
 %.o: %.c
