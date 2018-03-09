@@ -9,6 +9,7 @@ Small library to make things easier.
 /* Get the location of the timesheet file */
 void getts(char * str) {
 	char * tmp;
+	int len = 0;
 	int i = 0;
 	
 	tmp = getenv("TSLOC");
@@ -22,8 +23,5 @@ void getts(char * str) {
 		++i;
 	}
 	
-	while (i < sizeof(str)) {
-		str[i] = '\0';
-		++i;
-	}
+	str[i] = '\0';
 }
