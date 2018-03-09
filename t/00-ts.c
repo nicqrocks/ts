@@ -2,6 +2,8 @@
 Testing the `ts` library.
 */
 
+#define _XOPEN_SOURCE 600
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,8 +26,8 @@ int chkgetts(char *, char *);
 
 int main() {
 	char * home = getenv("HOME");
-
 	strcat(home, "/Documents/ts");
+
 	chkgetts("ts", "ts");
 	chkgetts(NULL, home);
 
@@ -38,19 +40,19 @@ int main() {
 /* Check if the getts function works. */
 int chkgetts(char * ev, char * ex) {
 	char ts[257];
-	
+
 	if (ev != NULL) {
 		setenv("TSLOC", ev, 1);
 	} else {
 		unsetenv("TSLOC");
 	}
-	
+
 	getts(ts);
-	
+
 	if (strcmp(ts, ex) == 0) {
 		ok("`getts` gives the correct location");
 	} else {
-		char tmp[257];
+		char tmp[257] = "";
 		strcat(tmp, "Got ");
 		strcat(tmp, ts);
 		strcat(tmp, " and expected ");

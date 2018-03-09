@@ -19,7 +19,8 @@ t/00-ts.t: t/00-ts.o ts.o
 	$(CC) $(FLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(BIN) *.o t/00-ts.t
+	rm -f $(BIN) t/00-ts.t
+	find . -name "*.o" | xargs rm
 
 test: $(BIN) t/00-ts.t
 	prove -v

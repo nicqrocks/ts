@@ -2,6 +2,10 @@
 
 source `dirname $0`/tap.sh
 
+#File to use for testing.
+TSLOC=/tmp/ts.test
+export TSLOC
+
 #Make sure the help bit works.
 if [[ `./tkeep | grep -c "USAGE"` -eq 1 ]]; then
 	ok "No arg help message"
@@ -10,17 +14,17 @@ else
 fi
 
 #Make sure that tkeep can append to the file.
-rm ts
-TSLOC=ts ./tkeep -i
-TSLOC=ts ./tkeep -o
-if [[ `cat ts | wc -l` -eq 2 ]]; then
+rm $TSLOC
+./tkeep -i
+./tkeep -o
+if [[ `cat $TSLOC | wc -l` -eq 2 ]]; then
 	ok "Can append to the file"
 else
-	nok "Only wrote" `cat ts | wc -l` "lines"
+	nok "Only wrote" `cat $TSLOC | wc -l` "lines"
 fi
 
 #Check if the dates are being made properly.
-for d in `cut -d',' -f2 ts`; do
+for d in `cut -d',' -f2 $TSLOC`; do
 	if [[ `echo "$d" | wc -c` -eq `date +%FT%T%z | wc -c` ]]; then
 		ok "$d"
 	else
@@ -28,5 +32,5 @@ for d in `cut -d',' -f2 ts`; do
 	fi
 done
 
-rm ts
+rm $TSLOC
 done-testing
