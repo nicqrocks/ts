@@ -33,9 +33,9 @@ int main(int argc, char const *argv[]) {
 	for (int i = 1; i < argc; ++i) {
 		if (chkopt("-h") || chkopt("--help")) { help(); }
 		else
-		if (chkopt("-i") || chkopt("--in")  ) { write(loc, 0); }
+		if (chkopt("-i") || chkopt("--in")  ) { write(loc, 1); }
 		else
-		if (chkopt("-o") || chkopt("--out") ) { write(loc, 1); }
+		if (chkopt("-o") || chkopt("--out") ) { write(loc, 0); }
 		else
 		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
 		else {
