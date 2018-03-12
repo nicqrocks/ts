@@ -1,6 +1,6 @@
 #Configuration file for make
 
-VERSION = 0.3
+VERSION = 0.4
 
 #Change the values below to match your needs.
 
@@ -12,4 +12,3 @@ FLAGS = -DVERSION=\"$(VERSION)\" -std=c99
 
 #Compiler
 # CC = tcc
-

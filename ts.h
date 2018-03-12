@@ -11,6 +11,7 @@ Small library to make things easier.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 /* Define marcos */
@@ -21,7 +22,7 @@ Small library to make things easier.
 
 /* Prototypes */
 void getts(char *);
+time_t d2t(char *);
 
 
 #endif
-

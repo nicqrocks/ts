@@ -21,15 +21,20 @@ int TAP_COUNT = 0;
 
 
 /* Prototypes */
-int chkgetts(char *, char *);
+int chk_getts(char *, char *);
+int chk_d2t(char *);
 
 
 int main() {
 	char * home = getenv("HOME");
 	strcat(home, "/Documents/ts");
 
-	chkgetts("ts", "ts");
-	chkgetts(NULL, home);
+	chk_getts("ts", "ts");
+	chk_getts(NULL, home);
+
+	chk_d2t("2018/03/06");
+	chk_d2t("2018/03/07");
+	chk_d2t("2018/03/12");
 
 	donet();
 
@@ -38,7 +43,7 @@ int main() {
 
 
 /* Check if the getts function works. */
-int chkgetts(char * ev, char * ex) {
+int chk_getts(char * ev, char * ex) {
 	char ts[257];
 
 	if (ev != NULL) {
@@ -51,13 +56,31 @@ int chkgetts(char * ev, char * ex) {
 
 	if (strcmp(ts, ex) == 0) {
 		ok("`getts` gives the correct location");
+		return 1;
 	} else {
 		char tmp[257] = "";
-		strcat(tmp, "Got ");
-		strcat(tmp, ts);
-		strcat(tmp, " and expected ");
-		strcat(tmp, ex);
+		sprintf(tmp, "Got '%s' and expected '%s'\n", ts, ex);
 		nok(tmp);
+		return 0;
 	}
-	return 1;
+}
+
+
+/* Check if `d2t` can convert from a date string to time_t. */
+int chk_d2t(char * d) {
+	time_t r = d2t(d);
+	struct tm * tmp = localtime(&r);
+	char * rd;
+
+	strftime(rd, 12, "%Y/%m/%d", tmp);
+
+	if (strcmp(rd, d) == 0) {
+		ok("`d2t` gives the correct time_t");
+		return 0;
+	} else {
+		char tmp[257];
+		sprintf(tmp, "`d2t` gave %s instead of %s");
+		nok(tmp);
+		return 1;
+	}
 }

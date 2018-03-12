@@ -38,7 +38,6 @@ else
 	nok "Out value is not 0. Got:" `sed "2q;d" $TSLOC`
 fi
 
-
 #Check if the dates are being made properly.
 for d in `cut -d',' -f2 $TSLOC`; do
 	if [[ `echo "$d" | wc -c` -eq `date +%FT%T%z | wc -c` ]]; then

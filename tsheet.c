@@ -18,11 +18,26 @@ void help();
 int main(int argc, char const *argv[]) {
 	/* Make some vars */
 	char loc[257];
+	time_t after;
+	time_t before;
 
 	/* Get time sheet location */
 	getts(loc);
 
-	/*  */
+	/* Check for any options */
+	for (int i = 1; i < argc; ++i) {
+		if (chkopt("-h") || chkopt("--help")) { help(); }
+		else
+		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
+		else
+		if (chkopt("-a") || chkopt("--after")) { after = d2t(argv[i]); }
+		else
+		if (chkopt("-b") || chkopt("--before")) { before = d2t(argv[i]); }
+		else {
+			fprintf(stderr, "Unknown argument: %s\n", argv[i]);
+			exit(2);
+		}
+	}
 
 	return 0;
 }

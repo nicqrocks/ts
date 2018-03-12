@@ -11,17 +11,41 @@ void getts(char * str) {
 	char * tmp;
 	int len = 0;
 	int i = 0;
-	
+
 	tmp = getenv("TSLOC");
 	if (tmp == NULL) {
 		tmp = getenv("HOME");
 		strcat(tmp, "/Documents/ts");
 	}
-	
+
 	while (tmp[i] != '\0') {
 		str[i] = tmp[i];
 		++i;
 	}
-	
+
 	str[i] = '\0';
+}
+
+
+/* Convert date string in "yyyy/mm/dd" to a time_t. */
+time_t d2t(char * d) {
+	time_t out;
+	struct tm tparts;
+	char date[257];
+	char * tok;
+
+	/* Read the string and get it's characters. */
+	strcpy(date, d);
+
+	tok = strtok(date, "/");
+	tparts.tm_year = strtol(tok, NULL, 10) - 1900;
+
+	tok = strtok(NULL, "/");
+	tparts.tm_mon = strtol(tok, NULL, 10) - 1;
+
+	tok = strtok(NULL, "/");
+	tparts.tm_mday = strtol(tok, NULL, 10);
+
+	out = mktime(&tparts);
+	return out;
 }
