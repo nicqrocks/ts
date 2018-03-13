@@ -20,6 +20,10 @@ Small library to make things easier.
 #define debug(msg)	(fprintf(stderr, "DEBUG: %s\n", msg))
 
 
+/* Structs */
+struct Part {};
+
+
 /* Prototypes */
 void getts(char *);
 time_t d2t(const char *);

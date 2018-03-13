@@ -6,6 +6,15 @@ Small library to make things easier.
 
 #include "ts.h"
 
+/* Linked list to hold time info. */
+struct Time {
+	char ymd[12];
+	struct tm in;
+	struct tm out;
+	struct Time * next;
+};
+
+
 /* Get the location of the timesheet file */
 void getts(char * str) {
 	char * tmp;
@@ -34,7 +43,6 @@ time_t d2t(const char * d) {
 	char date[257] = "";
 	char * tok;
 
-	/* Read the string and get it's characters. */
 	strcpy(date, d);
 
 	tok = strtok(date, "/");
