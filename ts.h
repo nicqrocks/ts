@@ -22,7 +22,7 @@ Small library to make things easier.
 
 /* Prototypes */
 void getts(char *);
-time_t d2t(char *);
+time_t d2t(const char *);
 
 
 #endif

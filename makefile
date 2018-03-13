@@ -23,7 +23,7 @@ clean:
 	find . -name "*.o" | xargs rm
 
 test: $(BIN) t/00-ts.t
-	prove -v
+	prove -f
 
 install: $(BIN)
 	mkdir -p $(PREFIX)/bin

@@ -3,7 +3,7 @@
 source `dirname $0`/tap.sh
 
 #File to use for testing.
-TSLOC=/tmp/ts.test
+TSLOC=/tmp/ts.$BASHPID
 export TSLOC
 
 #Make sure the help bit works.
@@ -14,7 +14,6 @@ else
 fi
 
 #Log an in and out time.
-rm $TSLOC
 ./tkeep -i
 ./tkeep -o
 

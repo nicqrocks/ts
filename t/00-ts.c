@@ -33,8 +33,8 @@ int main() {
 	chk_getts(NULL, home);
 
 	chk_d2t("2018/03/06");
-	chk_d2t("2018/03/07");
-	chk_d2t("2018/03/12");
+	chk_d2t("2018/02/07");
+	chk_d2t("2017/03/12");
 
 	donet();
 
@@ -68,19 +68,19 @@ int chk_getts(char * ev, char * ex) {
 
 /* Check if `d2t` can convert from a date string to time_t. */
 int chk_d2t(char * d) {
-	time_t r = d2t(d);
-	struct tm * tmp = localtime(&r);
-	char * rd;
+	time_t t = d2t(d);
+	struct tm * tp = gmtime(&t);
+	char r[12];
 
-	strftime(rd, 12, "%Y/%m/%d", tmp);
+	strftime(r, 12, "%Y/%m/%d", tp);
 
-	if (strcmp(rd, d) == 0) {
-		ok("`d2t` gives the correct time_t");
-		return 0;
-	} else {
-		char tmp[257];
-		sprintf(tmp, "`d2t` gave %s instead of %s");
-		nok(tmp);
+	if (strcmp(r, d) == 0) {
+		ok("`d2t` gives the correct date");
 		return 1;
+	} else {
+		char tmp[257] = "";
+		sprintf(tmp, "`d2t` gave %s instead of %s", r, d);
+		nok(tmp);
+		return 0;
 	}
 }

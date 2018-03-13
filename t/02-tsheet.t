@@ -3,10 +3,10 @@
 source `dirname $0`/tap.sh
 
 #Vars to use for testing.
-TSLOC=/tmp/ts.test
+TSLOC=/tmp/ts.$BASHPID
 export TSLOC
 
-TSCSV=/tmp/ts.csv
+TSCSV=/tmp/tscsv.$BASHPID
 export TSCSV
 
 

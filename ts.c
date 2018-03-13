@@ -28,10 +28,10 @@ void getts(char * str) {
 
 
 /* Convert date string in "yyyy/mm/dd" to a time_t. */
-time_t d2t(char * d) {
-	time_t out;
-	struct tm tparts;
-	char date[257];
+time_t d2t(const char * d) {
+	struct tm tparts = {};
+	time_t out = 0;
+	char date[257] = "";
 	char * tok;
 
 	/* Read the string and get it's characters. */
