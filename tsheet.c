@@ -23,7 +23,8 @@ struct Time * find_date(struct Time *, char *);
 
 int main(int argc, char const *argv[]) {
 	/* Make some vars */
-	struct Time * tbase = NULL;
+	struct Time ** tbase = NULL;
+	struct Time * last = NULL;
 	struct Time * node = NULL;
 	struct tm dt = {};
 	time_t after = 0;
@@ -62,6 +63,7 @@ int main(int argc, char const *argv[]) {
 	fcheck = parse_line(fh, &state, &dt);
 	while (fcheck != -1) {
 		/* Make some vars. */
+		struct Time *  t;
 		char ymd[12] = "";
 
 		/* Check if this date is before or after the  */
@@ -70,36 +72,39 @@ int main(int argc, char const *argv[]) {
 
 		/* Determine the point in the linked list to add this item. */
 		strdate(ymd, dt);
-		node = find_date(tbase, ymd);
-		if (node == NULL) {
-			node = malloc( sizeof( struct Time ) );
-			strcpy(node->ymd, ymd);
-			node->next = NULL;
+		t = find_date(*tbase, ymd);
+
+		if (t == NULL) {
+			t = malloc( sizeof( struct Time ) );
+			strcpy(t->ymd, ymd);
+			t->next = NULL;
 		}
+
 		if (state) {
-			node->in = dt;
+			t->in = dt;
 		} else {
-			node->out = dt;
+			t->out = dt;
 		}
+
+		debug(t->ymd);
 
 		printf("%02d:%02d\n", dt.tm_hour, dt.tm_min);
 		fcheck = parse_line(fh, &state, &dt);
 	}
 
 	/* Go through the linked list and print it out. */
-	node = tbase;
+	node = *tbase;
 	while (node) {
-		struct Time * last = NULL;
 		char  in[8] = "";
 		char out[8] = "";
 		float  diff = 0.0;
 
-		strtime(in,  tbase->in);
-		strtime(out, tbase->out);
+		strtime(in,  node->in);
+		strtime(out, node->out);
 		diff = (node->out).tm_hour - (node->in).tm_hour * 1.0;
 		diff += (node->out).tm_min - (node->in).tm_min * 1.0;
 
-		printf("%s,%s,%s,%.02f\n", tbase->ymd, in, out, diff);
+		printf("%s,%s,%s,%.02f\n", node->ymd, in, out, diff);
 
 		last = node;
 		node = node->next;
@@ -136,9 +141,11 @@ int parse_line(FILE * fh, int * s, struct tm * dt) {
 struct Time * find_date(struct Time * start, char * d) {
 	struct Time * node = start;
 	while (node != NULL) {
+		debug("Node is not null");
 		if (strcmp(node->ymd, d) == 0) {
-			return node;
+			break;
 		} else {
+			debug("Onto the next link");
 			node = node->next;
 		}
 	}
