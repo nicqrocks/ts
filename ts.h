@@ -20,13 +20,18 @@ Small library to make things easier.
 #define debug(msg)	(fprintf(stderr, "DEBUG: %s\n", msg))
 
 
-/* Structs */
-struct Part {};
-
+/* Linked list to hold time info. */
+struct Time {
+	char ymd[12];
+	struct tm in;
+	struct tm out;
+	struct Time * next;
+};
 
 /* Prototypes */
 void getts(char *);
 time_t d2t(const char *);
+struct tm iso2tm(const char *);
 
 
 #endif

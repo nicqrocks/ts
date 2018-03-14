@@ -6,14 +6,6 @@ Small library to make things easier.
 
 #include "ts.h"
 
-/* Linked list to hold time info. */
-struct Time {
-	char ymd[12];
-	struct tm in;
-	struct tm out;
-	struct Time * next;
-};
-
 
 /* Get the location of the timesheet file */
 void getts(char * str) {
@@ -57,3 +49,4 @@ time_t d2t(const char * d) {
 	out = mktime(&tparts);
 	return out;
 }
+
