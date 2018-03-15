@@ -19,11 +19,12 @@ Time sheet. Read the time log and output a time sheet in CSV format.
 void help();
 int parse_line(FILE *, int *, struct tm *);
 struct Time * find_date(struct Time *, char *);
+struct Time * get_last(struct Time *);
 
 
 int main(int argc, char const *argv[]) {
 	/* Make some vars */
-	struct Time ** tbase = NULL;
+	struct Time * tbase = NULL;
 	struct Time * last = NULL;
 	struct Time * node = NULL;
 	struct tm dt = {};
@@ -63,7 +64,6 @@ int main(int argc, char const *argv[]) {
 	fcheck = parse_line(fh, &state, &dt);
 	while (fcheck != -1) {
 		/* Make some vars. */
-		struct Time *  t;
 		char ymd[12] = "";
 
 		/* Check if this date is before or after the  */
@@ -72,28 +72,38 @@ int main(int argc, char const *argv[]) {
 
 		/* Determine the point in the linked list to add this item. */
 		strdate(ymd, dt);
-		t = find_date(*tbase, ymd);
+		if (tbase == NULL) {
+			tbase = malloc( sizeof( struct Time ) );
+			strcpy(tbase->ymd, ymd);
+			tbase->next = NULL;
+			node = tbase;
+		} else {
+			node = find_date(tbase, ymd);
+		}
 
-		if (t == NULL) {
-			t = malloc( sizeof( struct Time ) );
-			strcpy(t->ymd, ymd);
-			t->next = NULL;
+		if (node == NULL) {
+			debug("Node is NULL");
+			node = get_last(tbase);
+			node->next = malloc( sizeof( struct Time ) );
+			node = node->next;
+			strcpy(node->ymd, ymd);
+			node->next = NULL;
 		}
 
 		if (state) {
-			t->in = dt;
+			node->in = dt;
 		} else {
-			t->out = dt;
+			node->out = dt;
 		}
 
-		debug(t->ymd);
+		debug(tbase->ymd);
 
 		printf("%02d:%02d\n", dt.tm_hour, dt.tm_min);
 		fcheck = parse_line(fh, &state, &dt);
 	}
 
 	/* Go through the linked list and print it out. */
-	node = *tbase;
+	node = tbase;
 	while (node) {
 		char  in[8] = "";
 		char out[8] = "";
@@ -102,7 +112,7 @@ int main(int argc, char const *argv[]) {
 		strtime(in,  node->in);
 		strtime(out, node->out);
 		diff = (node->out).tm_hour - (node->in).tm_hour * 1.0;
-		diff += (node->out).tm_min - (node->in).tm_min * 1.0;
+		diff += ((node->out).tm_min - (node->in).tm_min * 1.0) / 100;
 
 		printf("%s,%s,%s,%.02f\n", node->ymd, in, out, diff);
 
@@ -119,9 +129,9 @@ int main(int argc, char const *argv[]) {
 
 /* Parse a line from the log file into a tm struct and int. */
 int parse_line(FILE * fh, int * s, struct tm * dt) {
-	int tmp;
-	int out;
-	char ds[30];
+	char ds[30] = "";
+	int tmp = 0;
+	int out = 0;
 
 	out = fscanf(fh, "%d,%s\n", s, ds);
 	sscanf(ds, "%d-%d-%dT%d:%d:%d-%n\n",
@@ -140,9 +150,12 @@ int parse_line(FILE * fh, int * s, struct tm * dt) {
 /* Look through the linked list and find a particular date. */
 struct Time * find_date(struct Time * start, char * d) {
 	struct Time * node = start;
+	debug(node->ymd);
+	debug(d);
 	while (node != NULL) {
 		debug("Node is not null");
 		if (strcmp(node->ymd, d) == 0) {
+			debug("Found node");
 			break;
 		} else {
 			debug("Onto the next link");
@@ -150,6 +163,17 @@ struct Time * find_date(struct Time * start, char * d) {
 		}
 	}
 	return node;
+}
+
+
+/* Return the last item in the list. */
+struct Time * get_last(struct Time * start) {
+	struct Time * last;
+	while (start != NULL) {
+		last = start;
+		start = start->next;
+	}
+	return last;
 }
 
 
