@@ -42,9 +42,9 @@ int main(int argc, char const *argv[]) {
 	for (int i = 1; i < argc; ++i) {
 		if (chkopt("-h") || chkopt("--help")  ) { help(); }
 		else
-		if (chkopt("-a") || chkopt("--after") ) { after = d2t(argv[i]); }
+		if (chkopt("-a") || chkopt("--after") ) { after = d2t(argv[++i]); }
 		else
-		if (chkopt("-b") || chkopt("--before")) { before = d2t(argv[i]); }
+		if (chkopt("-b") || chkopt("--before")) { before = d2t(argv[++i]); }
 		else
 		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
 		else {
@@ -67,8 +67,14 @@ int main(int argc, char const *argv[]) {
 		char ymd[12] = "";
 
 		/* Check if this date is before or after the  */
-		if (before != 0 && mktime(&dt) < before) { continue; }
-		if (after  != 0 && mktime(&dt) > after ) { continue; }
+		printf("%ld\n", mktime(&dt));
+		if (
+			(before != 0 && mktime(&dt) < before) ||
+			(after  != 0 && mktime(&dt) > after)
+		) {
+			fcheck = parse_line(fh, &state, &dt);
+			continue;
+		}
 
 		/* Determine the point in the linked list to add this item. */
 		strdate(ymd, dt);
@@ -108,7 +114,7 @@ int main(int argc, char const *argv[]) {
 		strtime(in,  node->in);
 		strtime(out, node->out);
 		diff = (node->out).tm_hour - (node->in).tm_hour * 1.0;
-		diff += ((node->out).tm_min - (node->in).tm_min * 1.0) / 100;
+		diff += ((node->out).tm_min - (node->in).tm_min * 1.0) / 60;
 
 		printf("%s,%s,%s,%.02f\n", node->ymd, in, out, diff);
 
