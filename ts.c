@@ -38,15 +38,25 @@ time_t d2t(const char * d) {
 	strcpy(date, d);
 
 	tok = strtok(date, "/");
-	tparts.tm_year = strtol(tok, NULL, 10) - 1900;
+	tparts.tm_year = strtol(tok, NULL, 10);
 
 	tok = strtok(NULL, "/");
-	tparts.tm_mon = strtol(tok, NULL, 10) - 1;
+	tparts.tm_mon = strtol(tok, NULL, 10);
 
 	tok = strtok(NULL, "/");
 	tparts.tm_mday = strtol(tok, NULL, 10);
 
+	tm_norm(&tparts);
 	out = mktime(&tparts);
 	return out;
 }
 
+
+/*
+Alter the values of a `tm` struct so that the values match what the struct
+actually expects.
+*/
+void tm_norm(struct tm * dt) {
+	dt->tm_year -= 1900;
+	dt->tm_mon  -= 1;
+}

@@ -51,18 +51,18 @@ else
 fi
 
 #Check if the before and after arguments work.
-diff -q <(./tsheet -a "2018/03/06") <(sed "2q;d" $TSEXP) >/dev/null
+diff -q <(./tsheet -a "2018/03/07") <(sed "2q;d" $TSEXP) >/dev/null
 if [[ $? -eq 0 ]]; then
 	ok "The '--after' arg works"
 else
-	nok "The '--after' arg does not give the correct result"
+	nok "The '--after' arg gives" `./tsheet -a "2018/03/07"`
 fi
 
 diff -q <(./tsheet -b "2018/03/07") <(sed "1q;d" $TSEXP) >/dev/null
 if [[ $? -eq 0 ]]; then
 	ok "The '--before' arg works"
 else
-	nok "The '--before' arg does not give the correct result"
+	nok "The '--before' arg gives" `./tsheet -b "2018/03/07"`
 fi
 
 rm $TSLOC

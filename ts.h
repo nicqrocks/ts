@@ -31,7 +31,7 @@ struct Time {
 /* Prototypes */
 void getts(char *);
 time_t d2t(const char *);
-struct tm iso2tm(const char *);
+void tm_norm(struct tm *);
 
 
 #endif

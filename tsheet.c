@@ -11,8 +11,8 @@ Time sheet. Read the time log and output a time sheet in CSV format.
 #include "ts.h"
 
 /* Define macros */
-#define strdate(s, tm) (sprintf(s, "%04d/%02d/%02d", tm.tm_year, tm.tm_mon, tm.tm_mday))
-#define strtime(s, tm) (sprintf(s, "%02d:%02d", tm.tm_hour, tm.tm_min))
+#define strdate(s, tm) (strftime(s, 12, "%Y/%m/%d", tm))
+#define strtime(s, tm) (strftime(s, 6, "%H:%M", tm))
 
 
 /* Prototypes */
@@ -67,17 +67,17 @@ int main(int argc, char const *argv[]) {
 		char ymd[12] = "";
 
 		/* Check if this date is before or after the  */
-		printf("%ld\n", mktime(&dt));
+		tm_norm(&dt);
 		if (
-			(before != 0 && mktime(&dt) < before) ||
-			(after  != 0 && mktime(&dt) > after)
+			(before != 0 && mktime(&dt) > before) ||
+			(after  != 0 && mktime(&dt) < after)
 		) {
 			fcheck = parse_line(fh, &state, &dt);
 			continue;
 		}
 
 		/* Determine the point in the linked list to add this item. */
-		strdate(ymd, dt);
+		strdate(ymd, &dt);
 		if (tbase == NULL) {
 			tbase = malloc( sizeof( struct Time ) );
 			strcpy(tbase->ymd, ymd);
@@ -111,8 +111,8 @@ int main(int argc, char const *argv[]) {
 		char out[8] = "";
 		float  diff = 0.0;
 
-		strtime(in,  node->in);
-		strtime(out, node->out);
+		strtime(in,  &(node->in));
+		strtime(out, &(node->out));
 		diff = (node->out).tm_hour - (node->in).tm_hour * 1.0;
 		diff += ((node->out).tm_min - (node->in).tm_min * 1.0) / 60;
 
