@@ -29,6 +29,8 @@ install: $(BIN)
 	mkdir -p $(PREFIX)/bin
 	cp -f tkeep $(PREFIX)/bin
 	chmod 755 $(PREFIX)/bin/tkeep
+	cp -f tsheet $(PREFIX)/bin
+	chmod 755 $(PREFIX)/bin/tsheet
 
 
 .PHONY: all install test clean

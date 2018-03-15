@@ -43,12 +43,29 @@ else
 fi
 
 #Make sure that the times are being reported correctly.
-
-if [[ `diff -q $TSCSV $TSEXP` ]]; then
+diff -q "$TSCSV" "$TSEXP" >/dev/null
+if [[ $? -eq 0 ]]; then
 	ok "The CSV was made properly."
 else
-	nok "CSV was not made properly." `diff $TSCSV $TSEXP`
+	nok `diff $TSCSV $TSEXP`
+fi
+
+#Check if the before and after arguments work.
+diff -q <(./tsheet -a "2018/03/06") <(sed "2q;d" $TSEXP) >/dev/null
+if [[ $? -eq 0 ]]; then
+	ok "The '--after' arg works"
+else
+	nok "The '--after' arg does not give the correct result"
+fi
+
+diff -q <(./tsheet -b "2018/03/07") <(sed "1q;d" $TSEXP) >/dev/null
+if [[ $? -eq 0 ]]; then
+	ok "The '--before' arg works"
+else
+	nok "The '--before' arg does not give the correct result"
 fi
 
 rm $TSLOC
+rm $TSCSV
+rm $TSEXP
 done-testing
