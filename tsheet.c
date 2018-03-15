@@ -82,7 +82,6 @@ int main(int argc, char const *argv[]) {
 		}
 
 		if (node == NULL) {
-			debug("Node is NULL");
 			node = get_last(tbase);
 			node->next = malloc( sizeof( struct Time ) );
 			node = node->next;
@@ -96,9 +95,6 @@ int main(int argc, char const *argv[]) {
 			node->out = dt;
 		}
 
-		debug(tbase->ymd);
-
-		printf("%02d:%02d\n", dt.tm_hour, dt.tm_min);
 		fcheck = parse_line(fh, &state, &dt);
 	}
 
@@ -150,15 +146,10 @@ int parse_line(FILE * fh, int * s, struct tm * dt) {
 /* Look through the linked list and find a particular date. */
 struct Time * find_date(struct Time * start, char * d) {
 	struct Time * node = start;
-	debug(node->ymd);
-	debug(d);
 	while (node != NULL) {
-		debug("Node is not null");
 		if (strcmp(node->ymd, d) == 0) {
-			debug("Found node");
 			break;
 		} else {
-			debug("Onto the next link");
 			node = node->next;
 		}
 	}
