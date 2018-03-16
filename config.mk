@@ -7,6 +7,9 @@ VERSION = 0.5
 #Install location
 PREFIX = /usr/local
 
+#Man page location
+MANPREFIX = $(PREFIX)/share/man
+
 #Flags
 FLAGS = -DVERSION=\"$(VERSION)\" -std=c99
 

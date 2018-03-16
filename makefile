@@ -31,6 +31,11 @@ install: $(BIN)
 	chmod 755 $(PREFIX)/bin/tkeep
 	cp -f tsheet $(PREFIX)/bin
 	chmod 755 $(PREFIX)/bin/tsheet
+	mkdir -p $(MANPREFIX)/man1
+	sed "s/VERSION/$(VERSION)/g" < tkeep.1 > $(MANPREFIX)/man1/tkeep.1
+	chmod 644 $(MANPREFIX)/man1/tkeep.1
+	sed "s/VERSION/$(VERSION)/g" < tsheet.1 > $(MANPREFIX)/man1/tsheet.1
+	chmod 644 $(MANPREFIX)/man1/tsheet.1
 
 
 .PHONY: all install test clean
