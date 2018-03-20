@@ -71,3 +71,12 @@ void err_ymd(const char * msg) {
 	if (msg != NULL) { fprintf(stderr, "\tGot: %s\n", msg); }
 	exit(11);
 }
+
+
+/* Free the memory for each item in the linked list. */
+void freell(struct Time * node) {
+	if (node != NULL) {
+		freell(node->next);
+		free(node);
+	}
+}

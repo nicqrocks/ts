@@ -27,7 +27,6 @@ int main(int argc, char const *argv[]) {
 	/* Make some vars */
 	struct Time * tbase = NULL;
 	struct Time * lnode = NULL;
-	struct Time * node = NULL;
 	struct tm dt = {};
 	time_t after = 0;
 	time_t before = 0;
@@ -35,8 +34,8 @@ int main(int argc, char const *argv[]) {
 	FILE * fh;
 	float tot = 0.0;
 	int fcheck = 0;
-	int state = 0;
 	int sum = 0;
+	int state = 0;
 
 	/* Get time sheet location */
 	getts(fn);
@@ -69,6 +68,7 @@ int main(int argc, char const *argv[]) {
 	fcheck = parse_line(fh, &state, &dt);
 	while (fcheck != -1) {
 		/* Make some vars. */
+		struct Time * node = NULL;
 		char ymd[12] = "";
 
 		/* Check if this date is before or after the  */
@@ -106,8 +106,7 @@ int main(int argc, char const *argv[]) {
 	}
 
 	/* Go through the linked list and print it out. */
-	node = tbase;
-	while (node) {
+	for (struct Time * node = tbase; node != NULL; node = node->next) {
 		char  in[8] = "";
 		char out[8] = "";
 		float  diff = 0.0;
@@ -119,13 +118,12 @@ int main(int argc, char const *argv[]) {
 		tot += diff;
 
 		printf("%s,%s,%s,%.02f\n", node->ymd, in, out, diff);
-
-		lnode = node;
-		node = node->next;
-		free(lnode);
 	}
 
 	fclose(fh);
+
+	/* Clear out the linked list. */
+	freell(tbase);
 
 	if (sum) {
 		printf("Total: %.02f\n", tot);

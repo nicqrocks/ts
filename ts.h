@@ -34,6 +34,7 @@ void getts(char *);
 time_t d2t(const char *);
 void tm_norm(struct tm *);
 void err_ymd(const char *);
+void freell(struct Time *);
 
 
 #endif
