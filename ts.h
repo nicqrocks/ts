@@ -18,6 +18,7 @@ Small library to make things easier.
 #define chkopt(a)	(strcmp(argv[i], a) == 0)
 #define dscopt(a,b)	(printf("\t%s\n\t\t%s\n", a, b))
 #define debug(msg)	(fprintf(stderr, "DEBUG: %s\n", msg))
+#define err(msg)    (fprintf(stderr, "ERROR: %s\n", msg))
 
 
 /* Linked list to hold time info. */
@@ -32,6 +33,7 @@ struct Time {
 void getts(char *);
 time_t d2t(const char *);
 void tm_norm(struct tm *);
+void err_ymd(const char *);
 
 
 #endif

@@ -38,12 +38,15 @@ time_t d2t(const char * d) {
 	strcpy(date, d);
 
 	tok = strtok(date, "/");
+	if (tok == NULL) { err_ymd(d); }
 	tparts.tm_year = strtol(tok, NULL, 10);
 
 	tok = strtok(NULL, "/");
+	if (tok == NULL) { err_ymd(d); }
 	tparts.tm_mon = strtol(tok, NULL, 10);
 
 	tok = strtok(NULL, "/");
+	if (tok == NULL) { err_ymd(d); }
 	tparts.tm_mday = strtol(tok, NULL, 10);
 
 	tm_norm(&tparts);
@@ -59,4 +62,12 @@ actually expects.
 void tm_norm(struct tm * dt) {
 	dt->tm_year -= 1900;
 	dt->tm_mon  -= 1;
+}
+
+
+/* Error out due to date formatting problems. */
+void err_ymd(const char * msg) {
+	err("Date format must be YYYY/MM/DD");
+	if (msg != NULL) { fprintf(stderr, "\tGot: %s\n", msg); }
+	exit(11);
 }
