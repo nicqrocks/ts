@@ -37,7 +37,10 @@ int main(int argc, char const *argv[]) {
 		else
 		if (chkopt("-o") || chkopt("--out") ) { write(loc, 0); }
 		else
-		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
+		if (chkopt("-v") || chkopt("--version")) {
+			printf("%s\n", VERSION);
+			exit(1);
+		}
 		else {
 			fprintf(stderr, "Unknown argument: %s\n", argv[i]);
 			exit(2);

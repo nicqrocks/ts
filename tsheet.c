@@ -47,7 +47,10 @@ int main(int argc, char const *argv[]) {
 		else
 		if (chkopt("-s") || chkopt("--summary")) { sum = 1; }
 		else
-		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
+		if (chkopt("-v") || chkopt("--version")) {
+			printf("%s\n", VERSION);
+			exit(1);
+		}
 		else {
 			fprintf(stderr, "Unknown argument: %s\n", argv[i]);
 			exit(2);
@@ -93,11 +96,8 @@ int main(int argc, char const *argv[]) {
 			node = node->next;
 		}
 
-		if (state) {
-			node->in = dt;
-		} else {
-			node->out = dt;
-		}
+		if (state) { node->in = dt; }
+		else { node->out = dt; }
 	}
 
 	/* Go through the linked list and print it out. */
