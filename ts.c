@@ -7,6 +7,19 @@ Small library to make things easier.
 #include "ts.h"
 
 
+/* Set up a new Time struct. */
+struct Time * Time_new(char * ymd) {
+	struct Time * node;
+	struct tm none = {};
+	node = malloc( sizeof( struct Time ) );
+	strcpy(node->ymd, ymd);
+	node->in = none;
+	node->out = none;
+	node->next = NULL;
+	return node;
+}
+
+
 /* Get the location of the timesheet file */
 void getts(char * str) {
 	char * tmp;

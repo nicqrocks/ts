@@ -30,6 +30,7 @@ struct Time {
 };
 
 /* Prototypes */
+struct Time * Time_new( char *);
 void getts(char *);
 time_t d2t(const char *);
 void tm_norm(struct tm *);

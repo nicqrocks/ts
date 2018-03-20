@@ -20,20 +20,17 @@ void help();
 int parse_line(FILE *, int *, struct tm *);
 struct Time * find_date(struct Time *, char *);
 struct Time * get_last(struct Time *);
-struct Time * Time_new( char *);
 
 
 int main(int argc, char const *argv[]) {
 	/* Make some vars */
 	struct Time * tbase = NULL;
-	struct Time * lnode = NULL;
 	struct tm dt = {};
 	time_t after = 0;
 	time_t before = 0;
 	char fn[257] = "";
 	FILE * fh;
 	float tot = 0.0;
-	int fcheck = 0;
 	int sum = 0;
 	int state = 0;
 
@@ -65,8 +62,11 @@ int main(int argc, char const *argv[]) {
 	}
 
 	/* Read through the file and grab dates. */
-	fcheck = parse_line(fh, &state, &dt);
-	while (fcheck != -1) {
+	for (
+		int fcheck = parse_line(fh, &state, &dt);
+		fcheck != -1;
+		fcheck = parse_line(fh, &state, &dt)
+	) {
 		/* Make some vars. */
 		struct Time * node = NULL;
 		char ymd[12] = "";
@@ -76,10 +76,7 @@ int main(int argc, char const *argv[]) {
 		if (
 			(before != 0 && mktime(&dt) > before) ||
 			(after  != 0 && mktime(&dt) < after)
-		) {
-			fcheck = parse_line(fh, &state, &dt);
-			continue;
-		}
+		) { continue; }
 
 		/* Determine the point in the linked list to add this item. */
 		strdate(ymd, &dt);
@@ -101,8 +98,6 @@ int main(int argc, char const *argv[]) {
 		} else {
 			node->out = dt;
 		}
-
-		fcheck = parse_line(fh, &state, &dt);
 	}
 
 	/* Go through the linked list and print it out. */
@@ -130,19 +125,6 @@ int main(int argc, char const *argv[]) {
 	}
 
 	return 0;
-}
-
-
-/* Set up a new Time struct. */
-struct Time * Time_new(char * ymd) {
-	struct Time * node;
-	struct tm none = {};
-	node = malloc( sizeof( struct Time ) );
-	strcpy(node->ymd, ymd);
-	node->in = none;
-	node->out = none;
-	node->next = NULL;
-	return node;
 }
 
 
