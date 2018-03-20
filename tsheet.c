@@ -20,20 +20,23 @@ void help();
 int parse_line(FILE *, int *, struct tm *);
 struct Time * find_date(struct Time *, char *);
 struct Time * get_last(struct Time *);
+struct Time * Time_new( char *);
 
 
 int main(int argc, char const *argv[]) {
 	/* Make some vars */
 	struct Time * tbase = NULL;
-	struct Time * last = NULL;
+	struct Time * lnode = NULL;
 	struct Time * node = NULL;
 	struct tm dt = {};
 	time_t after = 0;
 	time_t before = 0;
 	char fn[257] = "";
 	FILE * fh;
+	float tot = 0.0;
 	int fcheck = 0;
 	int state = 0;
+	int sum = 0;
 
 	/* Get time sheet location */
 	getts(fn);
@@ -45,6 +48,8 @@ int main(int argc, char const *argv[]) {
 		if (chkopt("-a") || chkopt("--after") ) { after = d2t(argv[++i]); }
 		else
 		if (chkopt("-b") || chkopt("--before")) { before = d2t(argv[++i]); }
+		else
+		if (chkopt("-s") || chkopt("--summary")) { sum = 1; }
 		else
 		if (chkopt("-v") || chkopt("--version")) { printf("%s\n", VERSION); }
 		else {
@@ -79,9 +84,7 @@ int main(int argc, char const *argv[]) {
 		/* Determine the point in the linked list to add this item. */
 		strdate(ymd, &dt);
 		if (tbase == NULL) {
-			tbase = malloc( sizeof( struct Time ) );
-			strcpy(tbase->ymd, ymd);
-			tbase->next = NULL;
+			tbase = Time_new(ymd);
 			node = tbase;
 		} else {
 			node = find_date(tbase, ymd);
@@ -89,10 +92,8 @@ int main(int argc, char const *argv[]) {
 
 		if (node == NULL) {
 			node = get_last(tbase);
-			node->next = malloc( sizeof( struct Time ) );
+			node->next = Time_new(ymd);
 			node = node->next;
-			strcpy(node->ymd, ymd);
-			node->next = NULL;
 		}
 
 		if (state) {
@@ -115,17 +116,35 @@ int main(int argc, char const *argv[]) {
 		strtime(out, &(node->out));
 		diff = (node->out).tm_hour - (node->in).tm_hour * 1.0;
 		diff += ((node->out).tm_min - (node->in).tm_min * 1.0) / 60;
+		tot += diff;
 
 		printf("%s,%s,%s,%.02f\n", node->ymd, in, out, diff);
 
-		last = node;
+		lnode = node;
 		node = node->next;
-		free(last);
+		free(lnode);
 	}
 
 	fclose(fh);
 
+	if (sum) {
+		printf("Total: %.02f\n", tot);
+	}
+
 	return 0;
+}
+
+
+/* Set up a new Time struct. */
+struct Time * Time_new(char * ymd) {
+	struct Time * node;
+	struct tm none = {};
+	node = malloc( sizeof( struct Time ) );
+	strcpy(node->ymd, ymd);
+	node->in = none;
+	node->out = none;
+	node->next = NULL;
+	return node;
 }
 
 
@@ -180,6 +199,7 @@ void help() {
 	printf("OPTIONS:\n");
 	dscopt("-a|--after DATE", "Only return dates after the given date.");
 	dscopt("-b|--before DATE", "Only return dates before the given date.");
+	dscopt("-s|--summary", "Sum up all of the times shown.");
 	dscopt("-h|--help", "Display this help message.");
 	dscopt("-v|--version", "Print version: " VERSION);
 	printf("DATE: Date format should be in YYYY/MM/DD.\n");
