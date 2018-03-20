@@ -1,6 +1,6 @@
 #Configuration file for make
 
-VERSION = 0.7
+VERSION = 1.0
 
 #Change the values below to match your needs.
 
