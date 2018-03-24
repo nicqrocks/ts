@@ -75,6 +75,7 @@ actually expects.
 void tm_norm(struct tm * dt) {
 	dt->tm_year -= 1900;
 	dt->tm_mon  -= 1;
+	dt->tm_isdst = -1;
 }
 
 
